@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import Person;
 
 void main() => runApp(MaterialApp(
     home: logInPage(),
