@@ -1,125 +1,32 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(
-    home: logInPage(),
-));
+import 'package:gip_application/screens/login_page.dart';
+import 'package:gip_application/screens/menu.dart';
 
-class logInPage extends StatelessWidget {
-  const logInPage({Key? key}) : super(key: key);
+void main() {
+  runApp(const App());
+}
 
-  get children => null;
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Facenator'),
-        backgroundColor: Colors.deepPurple,
-      ),
-        body: Center(
-          child: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                  Colors.blue,
-                  Colors.red,
-                  ],
-                )
-            ),
-              child: ElevatedButton(
-                child: Text('Log in'),
-                onPressed: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyApp()),
-              );
-            },
-          ),
-        ),
-      ),
+    return MaterialApp(
+      //Get rid of debug Logo in corner
+      debugShowCheckedModeBanner: false,
+      title: 'Facenator',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LogInPage(),
+        '/login': (context) => const LogInPage(),
+        '/menu': (context) => const Menu(),
+      },
     );
   }
 }
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  static const String _title = 'Flutter Code Sample';
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
-    );
-  }
-}
-
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Facenator'),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'camera',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-
-

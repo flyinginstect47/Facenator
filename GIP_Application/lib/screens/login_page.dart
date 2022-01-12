@@ -1,30 +1,19 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:ui';
 
-void main() async {
-  runApp(
-    MaterialApp(
-      home: HomePage(),
-      title: "Animated-Login-Page-UI",
-    ),
-  );
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
-}
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:gip_application/screens/menu.dart';
 
-class HomePage extends StatefulWidget {
+class LogInPage extends StatefulWidget {
+  const LogInPage({Key? key}) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<LogInPage> createState() => _LogInPageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
   late AnimationController controller1;
   late AnimationController controller2;
   late Animation<double> animation1;
@@ -38,7 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     controller1 = AnimationController(
       vsync: this,
-      duration: Duration(
+      duration: const Duration(
         seconds: 5,
       ),
     );
@@ -96,7 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         setState(() {});
       });
 
-    Timer(Duration(milliseconds: 2500), () {
+    Timer(const Duration(milliseconds: 2500), () {
       controller1.forward();
     });
 
@@ -194,8 +183,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 2.58,
                                 () {
                                   HapticFeedback.lightImpact();
-                                  Fluttertoast.showToast(
-                                      msg: 'Login button pressed');
+                                  Navigator.pushNamed(context, "/menu");
                                 },
                               ),
                               SizedBox(width: size.width / 20),
@@ -356,4 +344,3 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
-//login page by bilalidrees github
