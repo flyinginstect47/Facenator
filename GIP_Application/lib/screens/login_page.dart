@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// ignore: unused_import
 import 'package:gip_application/screens/menu.dart';
 
 class LogInPage extends StatefulWidget {
@@ -58,7 +60,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
 
     controller2 = AnimationController(
       vsync: this,
-      duration: Duration(
+      duration: const Duration(
         seconds: 5,
       ),
     );
@@ -103,7 +105,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xff192028),
+      backgroundColor: const Color(0xff192028),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
         child: SingleChildScrollView(
@@ -153,7 +155,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                       child: Padding(
                         padding: EdgeInsets.only(top: size.height * .1),
                         child: Text(
-                          'APP NAME',
+                          'Facenator',
                           style: TextStyle(
                             color: Colors.white.withOpacity(.7),
                             fontSize: 30,
@@ -319,12 +321,12 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
               colors: [Color(0xffFD5E3D), Color(0xffC43990)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight)
           .createShader(Rect.fromCircle(
-        center: Offset(0, 0),
+        center: const Offset(0, 0),
         radius: radius,
       ));
 

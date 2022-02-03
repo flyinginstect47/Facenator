@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gip_application/screens/login_page.dart';
 import 'package:gip_application/screens/menu.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 

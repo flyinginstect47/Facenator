@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gip_application/screens/camera.dart';
 
 // class Menu extends StatelessWidget {
 //   const Menu({Key? key}) : super(key: key);
@@ -30,10 +31,11 @@ class _Menu extends State<Menu> {
       'Index 0: Home',
       style: optionStyle,
     ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    TakePictureScreen(),
+    // Text(
+    //   'Index 1: Business',
+    //   style: optionStyle,
+    // ),
     Text(
       'Index 2: School',
       style: optionStyle,
