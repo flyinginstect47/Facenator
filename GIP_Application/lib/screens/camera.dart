@@ -57,7 +57,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       testMode: false,
       selectDefaultSize: (List<Size> availableSizes) => const Size(1910, 1070),
       onCameraStarted: () {},
-      fitted: true,
+      fitted: false,
       captureMode: _captureMode,
       photoSize: _photoSize,
       sensor: _sensor,
