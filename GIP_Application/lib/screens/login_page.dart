@@ -1,12 +1,22 @@
 import 'dart:async';
+// ignore: unused_import
+import 'dart:isolate';
 import 'dart:ui';
+// ignore: unused_import
+import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 // ignore: unused_import
 import 'package:gip_application/screens/menu.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+String username = '';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -22,6 +32,39 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
   late Animation<double> animation2;
   late Animation<double> animation3;
   late Animation<double> animation4;
+
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  Future senddata(BuildContext cont) async {
+    if (username.text == "" || password.text == "") {
+      Fluttertoast.showToast(
+        msg: "Beide velden moeten ingevuld zijn!",
+        toastLenght: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        fontSize: 16.0,
+      );
+    } else {
+      var url = "http://192.168.56.1/localconnect/LogIn.php";
+      var response = await http.post(url, body: {
+        "username": username.text,
+        "password": password.text,
+      });
+
+      var data = await json.decode(response.body);
+
+      if (data == "success") {
+        Navigator.pushNamed(context, "/menu");
+      } else {
+        Fluttertoast.showToast(
+          msg: "De gebruikersnaam en wachtwoord combinatie klopt niet!",
+          toastLenght: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          fontSize: 16.0,
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -173,23 +216,21 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                         children: [
                           component1(Icons.account_circle_outlined,
                               'User name...', false, false),
-                          component1(
-                              Icons.email_outlined, 'Email...', false, true),
-                          component1(
+                          component2(
                               Icons.lock_outline, 'Password...', true, false),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              component2(
+                              component3(
                                 'LOGIN',
                                 2.58,
                                 () {
                                   HapticFeedback.lightImpact();
-                                  Navigator.pushNamed(context, "/menu");
+                                  senddata(context);
                                 },
                               ),
                               SizedBox(width: size.width / 20),
-                              component2(
+                              component3(
                                 'Forgotten password!',
                                 2.58,
                                 () {
@@ -208,11 +249,12 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          component2(
+                          component3(
                             'Create a new Account',
                             2,
                             () {
                               HapticFeedback.lightImpact();
+                              Navigator.pushNamed(context, "/SignIn");
                               Fluttertoast.showToast(
                                   msg: 'Create a new account button pressed');
                             },
@@ -251,6 +293,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
+            controller: username,
             style: TextStyle(color: Colors.white.withOpacity(.8)),
             cursorColor: Colors.white,
             obscureText: isPassword,
@@ -273,7 +316,50 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget component2(String string, double width, VoidCallback voidCallback) {
+  Widget component2(
+      IconData icon, String hintText, bool isPassword, bool isEmail) {
+    Size size = MediaQuery.of(context).size;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaY: 15,
+          sigmaX: 15,
+        ),
+        child: Container(
+          height: size.width / 8,
+          width: size.width / 1.2,
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(right: size.width / 30),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.05),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: TextField(
+            controller: password,
+            style: TextStyle(color: Colors.white.withOpacity(.8)),
+            cursorColor: Colors.white,
+            obscureText: isPassword,
+            keyboardType:
+                isEmail ? TextInputType.emailAddress : TextInputType.text,
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                icon,
+                color: Colors.white.withOpacity(.7),
+              ),
+              border: InputBorder.none,
+              hintMaxLines: 1,
+              hintText: hintText,
+              hintStyle:
+                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(.5)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget component3(String string, double width, VoidCallback voidCallback) {
     Size size = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
@@ -310,7 +396,8 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
 }
 
 class Fluttertoast {
-  static void showToast({String? msg}) {}
+  static void showToast(
+      {String? msg, Toast? toastLenght, double? fontSize, gravity}) {}
 }
 
 class MyPainter extends CustomPainter {
@@ -345,4 +432,11 @@ class MyBehavior extends ScrollBehavior {
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  // ignore: todo
+  // TODO: implement build
+  throw UnimplementedError();
 }
