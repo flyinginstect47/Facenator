@@ -27,6 +27,7 @@ class _AppState extends State<App> {
         '/': (context) => const LogInPage(),
         '/login': (context) => const LogInPage(),
         '/menu': (context) => const Menu(),
+        '/SignIn': (context) => const SignUpPage(),
       },
     );
   }
