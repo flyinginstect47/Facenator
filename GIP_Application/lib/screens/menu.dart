@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
+import 'package:gip_application/screens/profile.dart';
 
 // class Menu extends StatelessWidget {
 //   const Menu({Key? key}) : super(key: key);
@@ -36,10 +38,7 @@ class _Menu extends State<Menu> {
     //   'Index 1: Business',
     //   style: optionStyle,
     // ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    LogIn(),
   ];
 
   void _onItemTapped(int index) {

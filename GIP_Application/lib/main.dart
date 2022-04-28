@@ -1,7 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-
 import 'package:gip_application/screens/login_page.dart';
 import 'package:gip_application/screens/menu.dart';
+import 'package:gip_application/screens/profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  // Obtain a list of the available cameras on the device.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,6 +30,7 @@ class _AppState extends State<App> {
         '/': (context) => const LogInPage(),
         '/login': (context) => const LogInPage(),
         '/menu': (context) => const Menu(),
+        '/loginpage': (context) => const LogIn(),
       },
     );
   }
