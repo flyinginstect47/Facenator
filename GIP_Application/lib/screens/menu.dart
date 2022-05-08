@@ -18,7 +18,9 @@ import 'package:gip_application/screens/profile.dart';
 // }
 
 class Menu extends StatefulWidget {
-  const Menu({Key? key}) : super(key: key);
+  const Menu({Key? key, required this.camera}) : super(key: key);
+
+  final CameraDescription camera;
 
   @override
   State<Menu> createState() => _Menu();
@@ -26,25 +28,32 @@ class Menu extends StatefulWidget {
 
 class _Menu extends State<Menu> {
   int _selectedIndex = 0;
+  late CameraDescription cameraDescription;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    TakePictureScreen(),
-    // Text(
-    //   'Index 1: Business',
-    //   style: optionStyle,
-    // ),
-    LogIn(),
-  ];
+  late List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      const Text(
+        'Index 0: Home',
+        style: optionStyle,
+      ),
+      TakePictureScreen(camera: widget.camera),
+      // Text(
+      //   'Index 1: Business',
+      //   style: optionStyle,
+      // ),
+      const LogIn(),
+    ];
   }
 
   @override

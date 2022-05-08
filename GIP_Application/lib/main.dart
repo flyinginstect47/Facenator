@@ -6,18 +6,24 @@ import 'package:gip_application/screens/profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const App());
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+  runApp(App(camera: firstCamera));
 }
 
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key, required this.camera}) : super(key: key);
+
+  final CameraDescription camera;
 
   @override
   _AppState createState() => _AppState();
 }
 
+
+
 class _AppState extends State<App> {
-  // Obtain a list of the available cameras on the device.
+  
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,7 @@ class _AppState extends State<App> {
       routes: {
         '/': (context) => const LogInPage(),
         '/login': (context) => const LogInPage(),
-        '/menu': (context) => const Menu(),
+        '/menu': (context) => Menu(camera: widget.camera),
         '/loginpage': (context) => const LogIn(),
       },
     );
