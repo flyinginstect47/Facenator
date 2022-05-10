@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 // import 'package:camerawesome/camerawesome_plugin.dart';
 
 // A screen that allows users to take a picture using a given camera.
@@ -17,6 +21,8 @@ class TakePictureScreen extends StatefulWidget {
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  StreamController<String> controller = StreamController<String>();
+  late Stream stream;
 
   @override
   void initState() {
@@ -33,6 +39,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ResolutionPreset.high,
     );
 
+    stream = controller.stream;
     // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
   }
@@ -77,6 +84,19 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // where it was saved.
             final image = await _controller.takePicture();
 
+            var url =
+                Uri.parse('https://api.platerecognizer.com/v1/plate-reader/');
+            var img = File(image.path).readAsBytesSync();
+            String base64 = base64Encode(img);
+
+            var response = await http.post(url, body: {
+              "upload": base64,
+              "regions": "be"
+            }, headers: {
+              "Authorization": "Token dcf41504e2f27f0d581fe9a8370dc67b888ad313"
+            });
+            print('Response status: ${response.statusCode}');
+            print('Response body: ${response.body}');
             // If the picture was taken, display it on a new screen.
             await Navigator.of(context).push(
               MaterialPageRoute(
@@ -84,6 +104,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   // Pass the automatically generated path to
                   // the DisplayPictureScreen widget.
                   imagePath: image.path,
+                  response: response.body,
                 ),
               ),
             );
@@ -102,17 +123,25 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final String response;
 
-  const DisplayPictureScreen({Key? key, required this.imagePath})
+  const DisplayPictureScreen({Key? key, required this.imagePath, required this.response})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Center(child: Image.file(File(imagePath)),)
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Image.file(
+            File(imagePath),
+            height: 300,
+          ),
+          Text(response),
+        ]
+      )
     );
   }
 }
