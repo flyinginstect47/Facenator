@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.0.9
   path: ^1.8.0
   http: ^0.13.4
+  mysql1: ^0.19.2
 
 dev_dependencies:
   flutter_test:
