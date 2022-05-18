@@ -16,6 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 //import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+String ID = '1';
 String username = '';
 
 class LogInPage extends StatefulWidget {
@@ -38,12 +39,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
 
   Future senddata(BuildContext cont) async {
     if (username.text == "" || password.text == "") {
-      Fluttertoast.showToast(
-        msg: "Beide velden moeten ingevuld zijn!",
-        toastLenght: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        fontSize: 16.0,
-      );
+      _showToast();
     } else {
       var url = "http://192.168.56.1/localconnect/LogIn.php";
       var response = await http.post(url, body: {
@@ -54,21 +50,35 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
       var data = await json.decode(response.body);
 
       if (data == "success") {
+        sendID(context);
         Navigator.pushNamed(context, "/menu");
+        // create file
       } else {
-        Fluttertoast.showToast(
-          msg: "De gebruikersnaam en wachtwoord combinatie klopt niet!",
-          toastLenght: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          fontSize: 16.0,
-        );
+        _showToast2();
       }
     }
   }
 
+  Future sendID(BuildContext cont) async {
+    if (username.text == "" || password.text == "") {
+    } else {
+      String naam = username.text;
+      var url = "http://192.168.56.1/localconnect/SelectID.php?username=$naam";
+      var response = await http.post(url, body: {});
+
+      var data = json.decode(response.body);
+      ID = data;
+      return ID;
+    }
+  }
+
+  late FToast fToast;
+
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
 
     controller1 = AnimationController(
       vsync: this,
@@ -137,6 +147,58 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     controller2.forward();
   }
 
+  _showToast() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.indigoAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("Beide velden moeten ingevuld zijn!"),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
+
+  _showToast2() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.indigoAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Icon(Icons.check),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("Gebruikersnaam en Wachtwoord kloppen niet!"),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
+
   @override
   void dispose() {
     controller1.dispose();
@@ -198,7 +260,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                       child: Padding(
                         padding: EdgeInsets.only(top: size.height * .1),
                         child: Text(
-                          'Facenator',
+                          'Carlicious',
                           style: TextStyle(
                             color: Colors.white.withOpacity(.7),
                             fontSize: 30,
@@ -227,6 +289,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                                 () {
                                   HapticFeedback.lightImpact();
                                   senddata(context);
+                                  // sendID(context);
                                 },
                               ),
                               SizedBox(width: size.width / 20),
