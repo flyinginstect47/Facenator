@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
-
-// class Menu extends StatelessWidget {
-//   const Menu({Key? key}) : super(key: key);
-
-//   static const String _title = 'Flutter Code Sample';
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       title: _title,
-//       home: MyStatefulWidget(),
-//     );
-//   }
-// }
+import 'package:gip_application/screens/Profile_Page.dart';
+import 'package:gip_application/screens/Home_Page.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -32,14 +20,7 @@ class _Menu extends State<Menu> {
       style: optionStyle,
     ),
     TakePictureScreen(),
-    // Text(
-    //   'Index 1: Business',
-    //   style: optionStyle,
-    // ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -52,8 +33,9 @@ class _Menu extends State<Menu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Facenator'),
+        title: const Text('Carlicious'),
         backgroundColor: Colors.deepPurple,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
