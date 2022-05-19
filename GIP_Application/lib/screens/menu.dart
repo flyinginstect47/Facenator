@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
+import 'package:gip_application/screens/home.dart';
 import 'package:gip_application/screens/profile.dart';
 
 // class Menu extends StatelessWidget {
@@ -43,10 +44,11 @@ class _Menu extends State<Menu> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      const Text(
+      /* const Text(
         'Index 0: Home',
         style: optionStyle,
-      ),
+      ), */
+      const Home(),
       TakePictureScreen(camera: widget.camera),
       // Text(
       //   'Index 1: Business',
