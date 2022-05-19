@@ -19,6 +19,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 String ID = '1';
 String username = '';
 
+String tempname = '';
+String tempemail = '';
+String temppassword = '';
+String tempdescrip = '';
+
+String tempPassword = "";
+
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
 
@@ -46,13 +53,13 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
         "username": username.text,
         "password": password.text,
       });
-
+      tempPassword = password.text;
       var data = await json.decode(response.body);
 
       if (data == "success") {
         sendID(context);
+        // getInfo(context);
         Navigator.pushNamed(context, "/menu");
-        // create file
       } else {
         _showToast2();
       }
@@ -71,6 +78,19 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
       return ID;
     }
   }
+
+  // Future getInfo(BuildContext cont) async {
+  //   var url = "http://192.168.56.1/localconnect/SelectInfo.php?id=$ID";
+  //   var response = await http.post(url, body: {});
+
+  //   var data = await response.body;
+  //   final jsonData = jsonDecode(data);
+  //   tempname = jsonData[0]["Username"];
+  //   tempemail = jsonData[0]["Email"];
+  //   tempdescrip = jsonData[0]["Description"];
+  //   temppassword = jsonData[0]["Password"];
+  //   return;
+  // }
 
   late FToast fToast;
 
@@ -290,16 +310,6 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
                                   HapticFeedback.lightImpact();
                                   senddata(context);
                                   // sendID(context);
-                                },
-                              ),
-                              SizedBox(width: size.width / 20),
-                              component3(
-                                'Forgotten password!',
-                                2.58,
-                                () {
-                                  HapticFeedback.lightImpact();
-                                  Fluttertoast.showToast(
-                                      msg: 'Forgotten password button pressed');
                                 },
                               ),
                             ],
