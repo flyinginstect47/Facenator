@@ -8,10 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:gip_application/screens/camera.dart';
 // import 'package:gip_application/screens/Home_Page.dart';
 
-// String id = ID;
+String id = ID;
 String name = '';
 String email = '';
 String descrip = 'User';
+String password = tempPassword;
+String date = '';
+
+// String pass = tempPassword;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -62,7 +66,12 @@ class ProfilePageState extends State<ProfilePage> {
     name = jsonData[0]["Username"];
     email = jsonData[0]["Email"];
     descrip = jsonData[0]["Description"];
-    setState(() {});
+    // password = jsonData[0]["Password"];
+    date = jsonData[0]["Date"];
+    // setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
     return;
   }
 
@@ -210,6 +219,21 @@ class ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+          Container(
+              child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Account aangemaakt: $date",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15,
+                      color: Colors.purple,
+                    ))
+              ],
+            )
+          ])),
           Container(
             padding: EdgeInsets.only(left: 16, top: 25, right: 16),
             child: Column(
