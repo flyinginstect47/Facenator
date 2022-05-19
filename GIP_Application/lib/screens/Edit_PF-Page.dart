@@ -27,12 +27,20 @@ class EditPage extends StatefulWidget {
 }
 
 String id = ID;
-String name = '';
-String email = '';
-String descrip = '';
-String password = '';
+String tempname = '';
+String tempemail = '';
+String tempdescrip = '';
+String temppassword = '';
 
-bool loading = true;
+void getInfo() {
+  id = ID;
+  tempname = name;
+  tempemail = email;
+  tempdescrip = descrip;
+  temppassword = password;
+}
+
+bool _passwordVisible = false;
 
 class _EditPage extends State<EditPage> with TickerProviderStateMixin {
   TextEditingController username = TextEditingController();
@@ -76,26 +84,27 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
     return password;
   }*/
 
-  Future getInfo(BuildContext cont) async {
-    var url = "http://192.168.56.1/localconnect/SelectInfo.php?id=$id";
-    var response = await http.post(url, body: {});
+  // Future getInfo(BuildContext cont) async {
+  //   var url = "http://192.168.56.1/localconnect/SelectInfo.php?id=$id";
+  //   var response = await http.post(url, body: {});
 
-    var data = await response.body;
-    final jsonData = jsonDecode(data);
-    name = jsonData[0]["Username"];
-    email = jsonData[0]["Email"];
-    descrip = jsonData[0]["Description"];
-    password = jsonData[0]["Password"];
-    // setState(() {
-    //   loading = false;
-    // });
-    return;
-  }
+  //   var data = await response.body;
+  //   final jsonData = jsonDecode(data);
+  //   name = jsonData[0]["Username"];
+  //   email = jsonData[0]["Email"];
+  //   descrip = jsonData[0]["Description"];
+  //   password = jsonData[0]["Password"];
+  //   // setState(() {
+  //   //   loading = false;
+  //   // });
+  //   return;
+  // }
 
   late FToast fToast;
 
   @override
   void initState() {
+    _passwordVisible = false;
     super.initState();
     fToast = FToast();
     fToast.init(context);
@@ -130,11 +139,12 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // if (loading) return CircularProgressIndicator();
-    getInfo(context);
+    // getInfo(context);
     /*sendUser(context);
     sendEmail(context);
     sendDescrip(context);
     sendPass(context);*/
+    getInfo();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -213,10 +223,10 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", name, false),
-              buildTextField1("E-mail", email, false),
-              buildTextField2("Description", descrip, false),
-              buildTextField3("Password", password, true),
+              buildTextField("Full Name", tempname, false),
+              buildTextField1("E-mail", tempemail, false),
+              buildTextField2("Description", tempdescrip, false),
+              buildTextField3("Password", temppassword, true),
               SizedBox(
                 height: 35,
               ),
@@ -371,12 +381,14 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
         controller: pass..text = placeholder,
-        obscureText: isPasswordTextField ? showPassword : false,
+        obscureText: !_passwordVisible,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
                 ? IconButton(
                     onPressed: () {
-                      placeholder = password;
+                      setState(() {
+                        _passwordVisible = true;
+                      });
                     },
                     icon: Icon(
                       Icons.remove_red_eye,
