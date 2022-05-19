@@ -16,8 +16,6 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 //import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-String username = '';
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -39,13 +37,8 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
 
   // ignore: non_constant_identifier_names
   Future SignUp(BuildContext cont) async {
-    if (username.text == "" || password.text == "") {
-      Fluttertoast.showToast(
-        msg: "Beide velden moeten ingevuld zijn!",
-        toastLenght: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        fontSize: 16.0,
-      );
+    if (username.text == "" || password.text == "" || email.text == "") {
+      _showToast2();
     } else {
       var url = "http://192.168.56.1/localconnect/InsertUser.php";
       var response = await http.post(url, body: {
@@ -58,20 +51,20 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
 
       if (data == "success") {
         Navigator.pushNamed(context, "/login");
+        _showToast3();
       } else {
-        Fluttertoast.showToast(
-          msg: "De gebruikersnaam en wachtwoord combinatie klopt niet!",
-          toastLenght: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          fontSize: 16.0,
-        );
+        _showToast();
       }
     }
   }
 
+  late FToast fToast;
+
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
 
     controller1 = AnimationController(
       vsync: this,
@@ -140,6 +133,84 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
     controller2.forward();
   }
 
+  _showToast() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.indigoAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("Er is iets misgegaan, probeer opnieuw."),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
+
+  _showToast2() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.indigoAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("Alle velden moeten ingevuld zijn!"),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
+
+  _showToast3() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.indigoAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("Account aangemaakt!"),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 3),
+    );
+  }
+
   @override
   void dispose() {
     controller1.dispose();
@@ -201,7 +272,7 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
                       child: Padding(
                         padding: EdgeInsets.only(top: size.height * .1),
                         child: Text(
-                          'Facenator',
+                          'Carlicious',
                           style: TextStyle(
                             color: Colors.white.withOpacity(.7),
                             fontSize: 30,
@@ -243,11 +314,11 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               component3(
-                                'Create account',
-                                2.58,
+                                'Already have an Account: Log In',
+                                1.9,
                                 () {
                                   HapticFeedback.lightImpact();
-                                  SignUp(context);
+                                  Navigator.pushNamed(context, "/");
                                 },
                               ),
                               SizedBox(width: size.width / 20),
@@ -262,13 +333,11 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           component3(
-                            'Log In',
+                            'Create Account',
                             2,
                             () {
                               HapticFeedback.lightImpact();
-                              Navigator.pushNamed(context, "/");
-                              Fluttertoast.showToast(
-                                  msg: 'Create a new account button pressed');
+                              SignUp(context);
                             },
                           ),
                           SizedBox(height: size.height * .05),
