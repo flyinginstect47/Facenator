@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
 import 'package:gip_application/screens/home.dart';
+import 'package:gip_application/screens/login_page.dart';
+import 'package:gip_application/screens/profile.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key, required this.camera}) : super(key: key);
@@ -17,7 +19,7 @@ class _Menu extends State<Menu> {
   late CameraDescription cameraDescription;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  
+
   late List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
@@ -30,17 +32,9 @@ class _Menu extends State<Menu> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      /* const Text(
-        'Index 0: Home',
-        style: optionStyle,
-      ), */
       const Home(),
       TakePictureScreen(camera: widget.camera),
-      // Text(
-      //   'Index 1: Business',
-      //   style: optionStyle,
-      // ),
-      const LogIn(),
+      const ProfilePage()
     ];
   }
 

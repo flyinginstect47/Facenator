@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 String ID = '1';
 String username = '';
@@ -36,20 +39,35 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
 
+  var conn;
+
+  Future<void> dbConnection() async {
+    conn = await MySqlConnection.connect(ConnectionSettings(
+        host: 'ID191774_6itngip15.db.webhosting.be',
+        port: 3306,
+        user: 'ID191774_6itngip15',
+        password: 'Zs21f5sdf5',
+        db: 'ID191774_6itngip15'));
+  }
+
   Future senddata(BuildContext cont) async {
     if (username.text == "" || password.text == "") {
       _showToast();
     } else {
-      var url = Uri.parse("http://192.168.56.1/localconnect/LogIn.php");
-      var response = await http.post(url, body: {
-        "username": username.text,
-        "password": password.text,
-      });
+      // var url = Uri.parse("http://192.168.56.1/localconnect/LogIn.php");
+      // var response = await http.post(url, body: {
+      //   "username": username.text,
+      //   "password": password.text,
+      // });
+      var hash = md5.convert(utf8.encode(password.text));
+      var response = await conn.query(
+          'select * from users where username = ? AND password = ?',
+          [username.text, hash.toString()]);
       tempPassword = password.text;
-      var data = await json.decode(response.body);
+      // var data = await json.decode(response.body);
 
-      if (data == "success") {
-        sendID(context);
+      if (response.toString().length > 2) {
+        // sendID(context);
         // getInfo(context);
         Navigator.pushNamed(context, "/menu");
       } else {
@@ -90,6 +108,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    dbConnection();
     fToast = FToast();
     fToast.init(context);
 

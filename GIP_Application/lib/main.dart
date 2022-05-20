@@ -52,7 +52,6 @@ class _AppState extends State<App> {
         '/EditPage': (context) => const EditPage(),
         '/ProfilePage': (context) => const ProfilePage(),
         '/menu': (context) => Menu(camera: widget.camera),
-        '/loginpage': (context) => const LogIn(),
       },
     );
   }
