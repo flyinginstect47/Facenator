@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
           itemCount: list.length,
           itemBuilder: (BuildContext context, int index) {
             return Card(
-              color: Colors.deepPurple[100],
+              color: Colors.deepPurple[400],
               elevation: 7,
               child: SizedBox(
                 width: 300,
