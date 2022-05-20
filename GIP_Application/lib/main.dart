@@ -7,9 +7,13 @@ import 'package:gip_application/screens/profile.dart';
 import 'package:gip_application/screens/login_page.dart';
 import 'package:gip_application/screens/menu.dart';
 import 'package:gip_application/screens/sign_up.dart';
+import 'package:camera/camera.dart';
 
-void main() {
-  runApp(const App());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+  runApp(App(camera: firstCamera));
 }
 
 // Future<void> main() async {
@@ -21,13 +25,19 @@ void main() {
 // }
 
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  const App({Key? key, required this.camera}) : super(key: key);
+
+  final CameraDescription camera;
 
   @override
   _AppState createState() => _AppState();
 }
 
+
+
 class _AppState extends State<App> {
+  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,10 +48,11 @@ class _AppState extends State<App> {
       routes: {
         '/': (context) => const LogInPage(),
         '/login': (context) => const LogInPage(),
-        '/menu': (context) => const Menu(),
         '/SignIn': (context) => const SignUpPage(),
         '/EditPage': (context) => const EditPage(),
         '/ProfilePage': (context) => const ProfilePage(),
+        '/menu': (context) => Menu(camera: widget.camera),
+        '/loginpage': (context) => const LogIn(),
       },
     );
   }
