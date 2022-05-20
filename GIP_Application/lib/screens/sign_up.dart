@@ -40,7 +40,7 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
     if (username.text == "" || password.text == "" || email.text == "") {
       _showToast2();
     } else {
-      var url = "http://192.168.56.1/localconnect/InsertUser.php";
+      var url = Uri.parse("http://192.168.56.1/localconnect/InsertUser.php");
       var response = await http.post(url, body: {
         "username": username.text,
         "password": password.text,

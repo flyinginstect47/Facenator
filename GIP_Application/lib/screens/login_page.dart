@@ -1,20 +1,12 @@
 import 'dart:async';
-// ignore: unused_import
-import 'dart:isolate';
 import 'dart:ui';
-// ignore: unused_import
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: unused_import
-import 'package:gip_application/screens/menu.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 String ID = '1';
 String username = '';
@@ -48,7 +40,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     if (username.text == "" || password.text == "") {
       _showToast();
     } else {
-      var url = "http://192.168.56.1/localconnect/LogIn.php";
+      var url = Uri.parse("http://192.168.56.1/localconnect/LogIn.php");
       var response = await http.post(url, body: {
         "username": username.text,
         "password": password.text,
@@ -70,7 +62,8 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     if (username.text == "" || password.text == "") {
     } else {
       String naam = username.text;
-      var url = "http://192.168.56.1/localconnect/SelectID.php?username=$naam";
+      var url = Uri.parse(
+          "http://192.168.56.1/localconnect/SelectID.php?username=$naam");
       var response = await http.post(url, body: {});
 
       var data = json.decode(response.body);
@@ -189,7 +182,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
+      toastDuration: const Duration(seconds: 3),
     );
   }
 
@@ -215,7 +208,7 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: Duration(seconds: 3),
+      toastDuration: const Duration(seconds: 3),
     );
   }
 

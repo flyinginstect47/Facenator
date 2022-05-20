@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:gip_application/screens/Edit_PF-Page.dart';
-import 'package:gip_application/screens/Profile_Page.dart';
+import 'package:gip_application/screens/edit_pf.dart';
+import 'package:gip_application/screens/profile.dart';
 import 'package:gip_application/screens/login_page.dart';
 import 'package:gip_application/screens/menu.dart';
 import 'package:gip_application/screens/sign_up.dart';
@@ -48,9 +48,10 @@ class _AppState extends State<App> {
 }
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _SplashScreenState();
   }
 }
@@ -58,7 +59,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
   }
@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage("assets/images/clinician_splash.png"),
               fit: BoxFit.cover),
@@ -77,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void startTimer() {
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       navigateUser(); //It will redirect  after 3 seconds
     });
   }

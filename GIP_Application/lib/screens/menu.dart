@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
-import 'package:gip_application/screens/Profile_Page.dart';
-import 'package:gip_application/screens/Home_Page.dart';
+import 'package:gip_application/screens/profile.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
