@@ -5,9 +5,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/profile.dart';
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gip_application/screens/login_page.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:crypto/crypto.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({Key? key}) : super(key: key);
@@ -38,64 +39,46 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
   TextEditingController emails = TextEditingController();
   TextEditingController pass = TextEditingController();
 
-  /*Future sendUser(BuildContext cont) async {
-    var url = "http://192.168.56.1/localconnect/SelectUser.php?id=$id";
-    var response = await http.post(url, body: {});
-
-    var data = await json.decode(response.body);
-    name = data;
-    return name;
-  }
-
-  Future sendEmail(BuildContext cont) async {
-    var url = "http://192.168.56.1/localconnect/SelectEmail.php?id=$id";
-    var response = await http.post(url, body: {});
-
-    var data = await json.decode(response.body);
-    email = data;
-    return email;
-  }
-
-  Future sendDescrip(BuildContext cont) async {
-    var url = "http://192.168.56.1/localconnect/SelectDescrip.php?id=$id";
-    var response = await http.post(url, body: {});
-
-    var data = await json.decode(response.body);
-    descrip = data;
-    return descrip;
-  }
-
-  Future sendPass(BuildContext cont) async {
-    var url = "http://192.168.56.1/localconnect/SelectPass.php?id=$id";
-    var response = await http.post(url, body: {});
-
-    var data = await json.decode(response.body);
-    password = data;
-    return password;
-  }*/
-
-  // Future getInfo(BuildContext cont) async {
-  //   var url = "http://192.168.56.1/localconnect/SelectInfo.php?id=$id";
-  //   var response = await http.post(url, body: {});
-
-  //   var data = await response.body;
-  //   final jsonData = jsonDecode(data);
-  //   name = jsonData[0]["Username"];
-  //   email = jsonData[0]["Email"];
-  //   descrip = jsonData[0]["Description"];
-  //   password = jsonData[0]["Password"];
-  //   // setState(() {
-  //   //   loading = false;
-  //   // });
-  //   return;
-  // }
-
   late FToast fToast;
+
+  var conn;
+
+  Future<void> dbConnection() async {
+    conn = await MySqlConnection.connect(ConnectionSettings(
+        host: 'ID191774_6itngip15.db.webhosting.be',
+        port: 3306,
+        user: 'ID191774_6itngip15',
+        password: 'Zs21f5sdf5',
+        db: 'ID191774_6itngip15'));
+    getUser();
+  }
+
+  Future getUser() async {
+    var response = await conn.query(
+        'select username, password, email, Description, created from users where id=?',
+        [id]);
+    List list = [];
+    for (var row in response) {
+      Elem e = Elem();
+      e.name = row[0];
+      e.email = row[2];
+      e.descrip = row[3];
+      // e.password = row[1];
+      list.add(e);
+    }
+    tempname = list[0].name;
+    tempemail = list[0].email;
+    tempdescrip = list[0].descrip;
+    setState(() {});
+    return;
+  }
 
   @override
   void initState() {
     _passwordVisible = false;
     super.initState();
+    dbConnection();
+    print(tempdescrip);
     fToast = FToast();
     fToast.init(context);
     _showToast() {
@@ -107,7 +90,7 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: const [
             Icon(Icons.check),
             SizedBox(
               width: 10.0,
@@ -128,12 +111,6 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
-    // if (loading) return CircularProgressIndicator();
-    // getInfo(context);
-    /*sendUser(context);
-    sendEmail(context);
-    sendDescrip(context);
-    sendPass(context);*/
     getInfo();
     return Scaffold(
       appBar: AppBar(
@@ -406,19 +383,30 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
     descrip = description.text;
     email = emails.text;
     password = pass.text;
-    var url = Uri.parse("http://192.168.56.1/localconnect/EditUser.php?id=$id");
-    var response = await http.post(url, body: {
-      "id": id,
-      "username": name,
-      "Description": descrip,
-      "email": email,
-      "password": password,
-    });
+    var hash = md5.convert(utf8.encode(pass.text));
 
-    var data = await json.decode(response.body);
+    var response = await conn.query(
+        'UPDATE `users` SET `username`=?,`Description`=?,`Email`=?,`password`=? WHERE id=?',
+        [name, descrip, email, hash.toString(), ID]);
+    print(response);
+    // var data = await json.decode(response.body);
 
-    if (data == "success") {
+    if (response != null) {
       Navigator.pop(context);
     }
   }
+}
+
+class Elem {
+  String name;
+  String email;
+  String descrip;
+  String password;
+
+  Elem({
+    this.name = "",
+    this.email = "",
+    this.descrip = "",
+    this.password = "",
+  });
 }
