@@ -72,23 +72,6 @@ class _LogInPageState extends State<LogInPage> with TickerProviderStateMixin {
     }
   }
 
-  // Future sendID(BuildContext cont) async {
-  //   if (username.text == "" || password.text == "") {
-  //   } else {
-  //     String naam = username.text;
-  //     var response = await conn.query(
-  //         'select id from users where username = ?',
-  //         [username.text]);
-  //     // var url = Uri.parse(
-  //     //     "http://192.168.56.1/localconnect/SelectID.php?username=$naam");
-  //     // var response = await http.post(url, body: {});
-
-  //     var data = json.decode(response.body);
-  //     ID = data;
-  //     return ID;
-  //   }
-  // }
-
   late FToast fToast;
 
   @override

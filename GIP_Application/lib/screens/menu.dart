@@ -2,7 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gip_application/screens/camera.dart';
 import 'package:gip_application/screens/home.dart';
-import 'package:gip_application/screens/login_page.dart';
 import 'package:gip_application/screens/profile.dart';
 
 class Menu extends StatefulWidget {

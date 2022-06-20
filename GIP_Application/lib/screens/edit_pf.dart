@@ -388,11 +388,9 @@ class _EditPage extends State<EditPage> with TickerProviderStateMixin {
     var response = await conn.query(
         'UPDATE `users` SET `username`=?,`Description`=?,`Email`=?,`password`=? WHERE id=?',
         [name, descrip, email, hash.toString(), ID]);
-    print(response);
-    // var data = await json.decode(response.body);
 
     if (response != null) {
-      Navigator.pop(context);
+      Navigator.pushNamed(context, "/menu");
     }
   }
 }

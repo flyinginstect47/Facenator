@@ -1,20 +1,13 @@
 import 'dart:async';
-// ignore: unused_import
-import 'dart:isolate';
 import 'dart:ui';
-// ignore: unused_import
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: unused_import
-import 'package:gip_application/screens/menu.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:crypto/crypto.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -35,21 +28,27 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
 
+  var conn;
+
+  Future<void> dbConnection() async {
+    conn = await MySqlConnection.connect(ConnectionSettings(
+        host: 'ID191774_6itngip15.db.webhosting.be',
+        port: 3306,
+        user: 'ID191774_6itngip15',
+        password: 'Zs21f5sdf5',
+        db: 'ID191774_6itngip15'));
+  }
+
   // ignore: non_constant_identifier_names
   Future SignUp(BuildContext cont) async {
     if (username.text == "" || password.text == "" || email.text == "") {
       _showToast2();
     } else {
-      var url = Uri.parse("http://192.168.56.1/localconnect/InsertUser.php");
-      var response = await http.post(url, body: {
-        "username": username.text,
-        "password": password.text,
-        "email": email.text,
-      });
-
-      var data = await json.decode(response.body);
-
-      if (data == "success") {
+      var hash = md5.convert(utf8.encode(password.text));
+      var response = await conn.query(
+          'INSERT INTO users (username, password, email) VALUES (?, ?, ?)',
+          [username.text, hash.toString(), email.text]);
+      if (response != null) {
         Navigator.pushNamed(context, "/login");
         _showToast3();
       } else {
@@ -63,6 +62,7 @@ class _SignUpPage extends State<SignUpPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    dbConnection();
     fToast = FToast();
     fToast.init(context);
 
